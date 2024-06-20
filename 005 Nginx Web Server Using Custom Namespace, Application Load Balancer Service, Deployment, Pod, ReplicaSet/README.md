@@ -14,15 +14,15 @@
 
 3. Step 2: Create Custom Namespace: Create a custom namespace for your Nginx web server:
     
-    kubectl create namespace my-namespace
+        kubectl create namespace my-namespace
 
 4. Step 3: Create Deployment: Create a Deployment YAML file (nginx-deployment.yaml) to deploy the Nginx web server:
     
-    kubectl apply -f nginx-deployment.yaml
+        kubectl apply -f nginx-deployment.yaml
 
 5. Step 4: Expose Deployment as a Service: Create a Service YAML file (nginx-service.yaml) to expose the Deployment using an Application Load Balancer:
 
-    kubectl apply -f nginx-service.yaml
+        kubectl apply -f nginx-service.yaml
 
 6. Step 5: Setup Ingress Controller and Ingress Resource:
 
@@ -30,20 +30,20 @@ Install AWS Load Balancer Controller: Follow the instructions to install the AWS
 
 Create an Ingress Resource: Create an Ingress YAML file (nginx-ingress.yaml) to route traffic to the Nginx Service:
 
-    kubectl apply -f nginx-ingress.yaml
+        kubectl apply -f nginx-ingress.yaml
 
 7. Step 6: Verify the Deployment
     - Check Pods: Ensure all pods are running
 
-    kubectl get pods -n my-namespace
+        kubectl get pods -n my-namespace
 
     - Check Ingress: Ensure the Ingress is created and has an address:
 
-    kubectl get ingress -n my-namespace
+        kubectl get ingress -n my-namespace
 
     - Test the Application: Access your application using the DNS name associated with your ALB:
 
-    curl http://my-nginx-app.example.com
+        curl http://my-nginx-app.example.com
 
 You should see the Nginx welcome page.
 
