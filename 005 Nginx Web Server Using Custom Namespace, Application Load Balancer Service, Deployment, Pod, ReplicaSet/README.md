@@ -35,15 +35,15 @@ Create an Ingress Resource: Create an Ingress YAML file (nginx-ingress.yaml) to 
 7. Step 6: Verify the Deployment
     - Check Pods: Ensure all pods are running
 
-        kubectl get pods -n my-namespace
+            get pods -n my-namespace
 
     - Check Ingress: Ensure the Ingress is created and has an address:
 
-        kubectl get ingress -n my-namespace
+            kubectl get ingress -n my-namespace
 
     - Test the Application: Access your application using the DNS name associated with your ALB:
 
-        curl http://my-nginx-app.example.com
+            curl http://my-nginx-app.example.com
 
 You should see the Nginx welcome page.
 
