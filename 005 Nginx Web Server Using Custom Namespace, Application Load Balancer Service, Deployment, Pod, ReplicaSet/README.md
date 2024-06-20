@@ -10,7 +10,7 @@
 
 2. Step 1: Setup EKS Cluster: If you don't have an EKS cluster yet, create one using eksctl:
     
-    eksctl create cluster --name my-eks-cluster --version 1.21 --region us-west-2 --nodegroup-name linux-nodes -node-type t3.medium --nodes 3 --nodes-min 1 --nodes-max 4 --managed
+        eksctl create cluster --name my-eks-cluster --version 1.21 --region us-west-2 --nodegroup-name linux-nodes -node-type t3.medium --nodes 3 --nodes-min 1 --nodes-max 4 --managed
 
 3. Step 2: Create Custom Namespace: Create a custom namespace for your Nginx web server:
     
