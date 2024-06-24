@@ -19,66 +19,67 @@ By following these steps, you will have a comprehensive practice on setting up a
 
 3. Verify Cluster:
     
-    kubectl get nodes
+        kubectl get nodes
 
 ## Step 2: Install EBS CSI Driver
 
 1. Add EBS CSI Driver Helm Repo:
+       
         helm repo add aws-ebs-csi-driver https://kubernetes-sigs.github.io/aws-ebs-csi-driver
         helm repo update
 
 2. Install EBS CSI Driver:
 
-    helm install aws-ebs-csi-driver aws-ebs-csi-driver/aws-ebs-csi-driver --namespace kube-system
+        helm install aws-ebs-csi-driver aws-ebs-csi-driver/aws-ebs-csi-driver --namespace kube-system
 
 3. Verify Installation:
 
-    kubectl get pods -n kube-system -l app.kubernetes.io/name=aws-ebs-csi-driver
+        kubectl get pods -n kube-system -l app.kubernetes.io/name=aws-ebs-csi-driver
 
 ## Step 3: Create Storage Class, PVC, and ConfigMap
 
 1. Create Storage Class:
 
-    vi storageclass.yaml
+        vi storageclass.yaml
 
-    kubectl apply -f storageclass.yaml
+        kubectl apply -f storageclass.yaml
 
 2. Create Persistent Volume Claim:
 
-    vi pvc.yaml
+        vi pvc.yaml
 
-    kubectl apply -f pvc.yaml
+        kubectl apply -f pvc.yaml
 
 
 3. Create ConfigMap:
 
-    vi configmap.yaml
+        vi configmap.yaml
 
-    kubectl apply -f configmap.yaml
+        kubectl apply -f configmap.yaml
 
 ## Step 4: Deploy MySQL with EBS Volume
 
 1. Create MySQL Deployment:
 
-    vi mysql-deployment.yaml
+        vi mysql-deployment.yaml
 
-    kubectl apply -f mysql-deployment.yaml
+        kubectl apply -f mysql-deployment.yaml
 
 2. Create Cluster IP Service:
 
-    vi mysql-service.yaml
+        vi mysql-service.yaml
 
-    kubectl apply -f mysql-service.yaml
+        kubectl apply -f mysql-service.yaml
 
 ## Step 5: Test MySQL Deployment
 
 1. Get MySQL Pod Name:
 
-    kubectl get pods -l app=mysql
+        kubectl get pods -l app=mysql
 
 2. Exec into MySQL Pod:
 
-    kubectl exec -it <mysql-pod-name> -- mysql -u root -p
+        kubectl exec -it <mysql-pod-name> -- mysql -u root -p
 
 Enter the password as password and test the database connection.
 
@@ -86,24 +87,24 @@ Enter the password as password and test the database connection.
 
 1. Delete MySQL Deployment and Service:
 
-    kubectl delete -f mysql-deployment.yaml
-    kubectl delete -f mysql-service.yaml
+        kubectl delete -f mysql-deployment.yaml
+        kubectl delete -f mysql-service.yaml
 
 
 2. Delete PVC and ConfigMap:
 
-    kubectl delete -f pvc.yaml
-    kubectl delete -f configmap.yaml
+        kubectl delete -f pvc.yaml
+        kubectl delete -f configmap.yaml
 
 3. Delete Storage Class:
 
-    kubectl delete -f storageclass.yaml
+        kubectl delete -f storageclass.yaml
 
 4. Uninstall EBS CSI Driver:
 
-    helm uninstall aws-ebs-csi-driver --namespace kube-system
+        helm uninstall aws-ebs-csi-driver --namespace kube-system
 
 5. Delete EKS Cluster:
 
-    eksctl delete cluster --name eks-cluster
+        eksctl delete cluster --name eks-cluster
 
