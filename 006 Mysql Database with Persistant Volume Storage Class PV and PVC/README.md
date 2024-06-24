@@ -51,7 +51,7 @@ By following these steps, you will have a comprehensive practice on setting up a
 - Verify ebs-csi pods running
         kubectl get pods -n kube-system
 
-## Step 3: Create Kubernetes Manifest for Storage Class, PVC, and ConfigMap
+## Step 4: Create Kubernetes Manifest for Storage Class, PVC, and ConfigMap
 
 1. Create Storage Class:
 
@@ -80,7 +80,7 @@ By following these steps, you will have a comprehensive practice on setting up a
 
         kubectl get configmap usermanagement-dbcreation-script
 
-## Step 4: Deploy MySQL with EBS Volume
+## Step 5: Deploy MySQL with EBS Volume
 
 1. Create MySQL Deployment:
 
@@ -102,9 +102,9 @@ By following these steps, you will have a comprehensive practice on setting up a
 
 
 
-        
 
-## Step 5: Test MySQL Deployment
+
+## Step 6: Test MySQL Deployment
 
 1. Get MySQL Pod Name:
 
@@ -116,28 +116,21 @@ By following these steps, you will have a comprehensive practice on setting up a
 
 Enter the password as password and test the database connection.
 
+3. Connect to MySQL Database
+
+        kubectl run -it --rm --image=mysql:5.6 --restart=Never mysql-client -- mysql -h mysql -pdbpassword11
+
+[or]
+
+        kubectl run -it --rm --image=mysql:latest --restart=Never mysql-client -- mysql -h mysql -pdbpassword11
+
+Verify usermgmt schema got created which we provided in ConfigMap
+        
+        mysql> show schemas;
+
 ## Step 6: Clean Up Resources
 
 1. Delete MySQL Deployment and Service:
 
-        kubectl delete -f mysql-deployment.yaml
-        kubectl delete -f mysql-service.yaml
-
-
-2. Delete PVC and ConfigMap:
-
-        kubectl delete -f pvc.yaml
-        kubectl delete -f configmap.yaml
-
-3. Delete Storage Class:
-
-        kubectl delete -f storageclass.yaml
-
-4. Uninstall EBS CSI Driver:
-
-        helm uninstall aws-ebs-csi-driver --namespace kube-system
-
-5. Delete EKS Cluster:
-
-        eksctl delete cluster --name eks-cluster
-
+        kubectl delete -f kube-manifests/
+ 
