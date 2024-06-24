@@ -10,19 +10,22 @@ By following these steps, you will have a comprehensive practice on setting up a
 
 ## Step 1: Set Up EKS Cluster
 1. Create EKS Cluster:
-    eksctl create cluster --name=eks-cluster --region=ap-south-1 --version=1.29 --nodegroup-name=my-nodes --node-type=t3.medium --managed --nodes=2 --nodes-min=2 --nodes-max=3
+        
+        eksctl create cluster --name=eks-cluster --region=ap-south-1 --version=1.29 --nodegroup-name=my-nodes --node-type=t3.medium --managed --nodes=2 --nodes-min=2 --nodes-max=3
 
 2. Update Kubeconfig:
-    aws eks update-kubeconfig --name eks-cluster --region ap-south-1
+        
+        aws eks update-kubeconfig --name eks-cluster --region ap-south-1
 
 3. Verify Cluster:
+    
     kubectl get nodes
 
 ## Step 2: Install EBS CSI Driver
 
 1. Add EBS CSI Driver Helm Repo:
-    helm repo add aws-ebs-csi-driver https://kubernetes-sigs.github.io/aws-ebs-csi-driver
-    helm repo update
+        helm repo add aws-ebs-csi-driver https://kubernetes-sigs.github.io/aws-ebs-csi-driver
+        helm repo update
 
 2. Install EBS CSI Driver:
 
