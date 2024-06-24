@@ -8,12 +8,12 @@ By following these steps, you will have a comprehensive practice on setting up a
 - helm installed on your local machine.
 - An IAM user with the necessary permissions to create and manage EKS clusters.
 
-## Step 1: Set Up EKS Cluster
+## Step 1: Set Up EKS Cluster (Optional)
 1. Create EKS Cluster:
         
         eksctl create cluster --name=eks-cluster --region=ap-south-1 --version=1.29 --nodegroup-name=my-nodes --node-type=t3.medium --managed --nodes=2 --nodes-min=2 --nodes-max=3
 
-2. Update Kubeconfig:
+2. Update Kubeconfig:(Optional)
         
         aws eks update-kubeconfig --name eks-cluster --region ap-south-1
 
@@ -21,7 +21,11 @@ By following these steps, you will have a comprehensive practice on setting up a
     
         kubectl get nodes
 
-## Step 2: Install EBS CSI Driver
+## Step 2: Associate IAM Policy to Worker Node IAM Role
+    - Policy Name: AmazonEBSCSIDriverPolicy
+
+
+## Step 3: Install EBS CSI Driver
 
 1. Add EBS CSI Driver Helm Repo:
        
@@ -36,40 +40,69 @@ By following these steps, you will have a comprehensive practice on setting up a
 
         kubectl get pods -n kube-system -l app.kubernetes.io/name=aws-ebs-csi-driver
 
-## Step 3: Create Storage Class, PVC, and ConfigMap
+## Or Install Using kubectl command (Optinal)
+- Verify kubectl version, it should be 1.14 or later
+        kubectl version --client --short
+
+- Deploy Amazon EBS CSI Driver
+
+        kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=master"
+
+- Verify ebs-csi pods running
+        kubectl get pods -n kube-system
+
+## Step 3: Create Kubernetes Manifest for Storage Class, PVC, and ConfigMap
 
 1. Create Storage Class:
 
-        vi storageclass.yaml
+        kubectl get storageclass
 
-        kubectl apply -f storageclass.yaml
+        vi kube-manifests/01-storage-class.yml
+
+        kubectl apply -f kube-manifests/01-storage-class.yml
+
+        kubectl get storageclass
 
 2. Create Persistent Volume Claim:
+        kubectl get pvc
+        
+        vi kube-manifests/pvc.yaml
 
-        vi pvc.yaml
-
-        kubectl apply -f pvc.yaml
-
+        kubectl apply -f kube-manifests/02-persistent-volume-claim.yml
+        
+        kubectl get pvc
 
 3. Create ConfigMap:
 
-        vi configmap.yaml
+        vi kube-manifests/03-UserManagement-ConfigMap.yml
 
-        kubectl apply -f configmap.yaml
+        kubectl apply -f kube-manifests/03-UserManagement-ConfigMap.yml
+
+        kubectl get configmap usermanagement-dbcreation-script
 
 ## Step 4: Deploy MySQL with EBS Volume
 
 1. Create MySQL Deployment:
 
-        vi mysql-deployment.yaml
+        vi kube-manifests/04-mysql-deployment.yml
 
-        kubectl apply -f mysql-deployment.yaml
+        kubectl apply -f kube-manifests/04-mysql-deployment.yml
+
+        kubectl get pods
 
 2. Create Cluster IP Service:
 
-        vi mysql-service.yaml
+        vi kube-manifests/05-mysql-clusterip-service.yml
 
-        kubectl apply -f mysql-service.yaml
+        kubectl apply -f kube-manifests/05-mysql-clusterip-service.yml
+
+        kubectl get svc
+
+
+
+
+
+        
 
 ## Step 5: Test MySQL Deployment
 
