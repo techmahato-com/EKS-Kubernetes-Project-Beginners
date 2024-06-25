@@ -1,0 +1,35 @@
+# nginx-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: custom-namespace
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: efs-document-root
+          mountPath: /usr/share/nginx/html
+        - name: efs-log-dir
+          mountPath: /var/log/nginx
+      volumes:
+      - name: efs-document-root
+        persistentVolumeClaim:
+          claimName: efs-pvc-doc
+      - name: efs-log-dir
+        persistentVolumeClaim:
+          claimName: efs-pvc-log

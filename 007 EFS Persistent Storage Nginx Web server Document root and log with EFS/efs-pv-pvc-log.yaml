@@ -1,0 +1,30 @@
+# efs-pv-log.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: efs-pv-log
+spec:
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: efs-sc
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: fs-06b033d7881dc809d #replace with efs ID.
+---
+# efs-pvc-log.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: efs-pvc-log
+  namespace: custom-namespace
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: efs-sc
+  resources:
+    requests:
+      storage: 5Gi

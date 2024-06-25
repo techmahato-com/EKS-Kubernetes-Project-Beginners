@@ -1,0 +1,30 @@
+# efs-pv-doc.yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: efs-pv-doc
+spec:
+  capacity:
+    storage: 5Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: efs-sc
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: fs-03dca3a42aac39e72 # replace with EFS ID
+---
+# efs-pvc-doc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: efs-pvc-doc
+  namespace: custom-namespace
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: efs-sc
+  resources:
+    requests:
+      storage: 5Gi
