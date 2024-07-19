@@ -9,7 +9,7 @@ Ensure kubectl is installed and configured to interact with your cluster.
 
 # Step 3: Create a Namespace
 Create a namespace to isolate your resources.
-        kubectl create namespace secret-demo
+        - kubectl create namespace secret-demo
 
 # Step 4: Create a Kubernetes Secret
 Kubernetes Secrets are used to store and manage sensitive information, such as passwords, OAuth tokens, and ssh keys.
