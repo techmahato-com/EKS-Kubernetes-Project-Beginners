@@ -1,0 +1,128 @@
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+               - key: role
+                 operator: In
+                 values:
+                    - PROD-Monitoring-NG-1
+
+#1   podAntiAffinityTopologyKey: kubernetes.io/hostname
+
+
+#2       ## Assign custom affinity rules to the prometheus operator
+#3   ## Assign custom affinity rules to the prometheus operator
+#4 ## Assign custom affinity rules to the prometheus instance
+#5     ## Assign custom affinity rules to the thanosRuler instance
+
+
+ # To make Grafana persistent (Using Statefulset)
+  #     - kubernetes.io/pvc-protection
+  persistence:
+    enabled: true
+    storageClassName: ebs-gp3-sc
+    size: 20Gi
+
+#8)Change the retention period to store the data for “100” no of days.
+
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: role
+            operator: In
+            values:
+              - Prod-Monitoring-NG
+
+
+3693     storageSpec:
+3694       volumeClaimTemplate:
+3695         spec:
+3696           storageClassName: ebs-gp3-sc
+3697           accessModes: ["ReadWriteOnce"]
+3698           resources:
+3699             requests:
+3700               storage: 30Gi
+
+storageSpec:
+  volumeClaimTemplate:
+    spec:
+      storageClassName: ebs-gp3-sc
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 31Gi
+
+
+
+803     podAntiAffinityTopologyKey: kubernetes.io/hostname
+ 804
+ 805     ## Assign custom affinity rules to the alertmanager instance
+ 806     ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+
+
+ 2376       ## Assign custom affinity rules to the prometheus operator
+2377       ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+2378       ##
+2379     affinity:
+2380       nodeAffinity:
+2381         requiredDuringSchedulingIgnoredDuringExecution:
+2382           nodeSelectorTerms:
+2383           - matchExpressions:
+2384             - key: role
+2385               operator: In
+2386               values:
+2387               - Staging-Magnifi-Monitoring-NG
+
+
+
+2695   ## Assign custom affinity rules to the prometheus operator
+2696   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+2697   ##
+2698   affinity:
+2699       nodeAffinity:
+2700         requiredDuringSchedulingIgnoredDuringExecution:
+2701           nodeSelectorTerms:
+2702           - matchExpressions:
+2703             - key: role
+2704               operator: In
+2705               values:
+2706               - Staging-Magnifi-Monitoring-NG
+
+
+
+
+
+3642     ## Assign custom affinity rules to the prometheus instance
+3643     ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+3644     ##
+3645     affinity:
+3646       nodeAffinity:
+3647         requiredDuringSchedulingIgnoredDuringExecution:
+3648           nodeSelectorTerms:
+3649           - matchExpressions:
+3650             - key: role
+3651               operator: In
+3652               values:
+3653               - Staging-Magnifi-Monitoring-NG
+
+
+4544     ## Assign custom affinity rules to the thanosRuler instance
+4545     ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+4546     ##
+4547     affinity:
+4548       nodeAffinity:
+4549         requiredDuringSchedulingIgnoredDuringExecution:
+4550           nodeSelectorTerms:
+4551           - matchExpressions:
+4552             - key: role
+4553               operator: In
+4554               values:
+4555               - Staging-Magnifi-Monitoring-NG
+4556
+
+
+
+

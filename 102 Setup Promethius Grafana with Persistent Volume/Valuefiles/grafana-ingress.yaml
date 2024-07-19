@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    meta.helm.sh/release-name: prom-stack-grafana
+    meta.helm.sh/release-namespace: monitoring
+    nginx.ingress.kubernetes.io/proxy-body-size: 110m
+  creationTimestamp: "2022-03-16T14:14:53Z"
+  generation: 2
+  labels:
+    app.kubernetes.io/instance: prom-stack-grafana
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: prom-stack-grafana
+    app.kubernetes.io/version: 1.16.0
+  name: prom-stack-grafana
+  namespace: monitoring
+  resourceVersion: "127824"
+  uid: b9ec8f33-c2ea-48a5-ad3e-04a3cd363cfd
+spec:
+  rules:
+  - host: grafana-prod.royalchallengers.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: prom-stack-grafana
+            port:
+              number: 80
+        path: /
+        pathType: ImplementationSpecific
+status:
+  loadBalancer:
+    ingress:
+    - hostname: afe6afce677194e469a81bf7a33daef2-b1c56693f42dda78.elb.ap-south-1.amazonaws.com

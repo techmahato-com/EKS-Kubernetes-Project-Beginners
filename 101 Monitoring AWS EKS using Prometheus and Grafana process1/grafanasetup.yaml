@@ -1,0 +1,34 @@
+# List all nodes and their labels:
+kubectl get nodes --show-labels
+  # role=dev-Monitoring-NG-1
+
+# Create SC and PVC
+# Edit values file and add node affinity and storage.
+
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: role
+                operator: In
+                values:
+                  - dev-Monitoring-NG-1
+
+
+ # To make Grafana persistent (Using Statefulset)
+  #     - kubernetes.io/pvc-protection
+    persistence:
+      enabled: true
+      storageClassName: ebs-gp3-sc
+      size: 20Gi
+
+
+storageSpec:
+  volumeClaimTemplate:
+    spec:
+      storageClassName: ebs-gp3-sc
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 20Gi
