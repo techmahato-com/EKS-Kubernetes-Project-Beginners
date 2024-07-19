@@ -16,6 +16,7 @@ Create a namespace to isolate your resources.
 Kubernetes Secrets are used to store and manage sensitive information, such as passwords, OAuth tokens, and ssh keys.
 
 Create a secret using kubectl:
+
         - kubectl create secret generic db-secret --from-literal=username=myuser --from-literal=password=mypassword -n secret-demo
 
 Create a secret using Yaml:
