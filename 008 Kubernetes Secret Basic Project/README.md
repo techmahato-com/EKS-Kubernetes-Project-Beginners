@@ -17,21 +17,24 @@ Kubernetes Secrets are used to store and manage sensitive information, such as p
 
 Create a secret using kubectl:
 
-        - kubectl create secret generic db-secret --from-literal=username=myuser --from-literal=password=mypassword -n secret-demo
+        kubectl create secret generic db-secret --from-literal=username=myuser --from-literal=password=mypassword -n secret-demo
 
 Create a secret using Yaml:
-        - kubectl apply -f secret.yaml
+        
+        kubectl apply -f secret.yaml
 
 Step 5: Deploy a Sample Application
 Deploy a sample application that uses the secret.
 
 Create a Deployment YAML file:
-    kubectl apply -f deployment.yaml
+        
+        kubectl apply -f deployment.yaml
 
 # Step 6: Verify the Secret is Used by the Pod
 Verify that the secret is correctly used by the application pod.
 
 Get the pods:
+        
         kubectl get pods -n secret-demo
 
 Check the environment variables in the running pod:
