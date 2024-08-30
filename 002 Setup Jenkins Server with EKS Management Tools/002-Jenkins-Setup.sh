@@ -44,7 +44,7 @@ sudo usermod -aG sudo jenkins
 
 # Ensure sudo group privileges
 echo "Ensure sudo group privileges..."
-echo "jenkins ALL=(ALL:ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/jenkins
+echo "jenkins ALL=(ALL:ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/90-cloud-init-users
 
 # Print confirmation message
 echo "Jenkins user added to sudo group with sudo privileges."
