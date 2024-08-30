@@ -1,19 +1,23 @@
 #!/bin/bash
 
+# This script is created by Tech Mahato | Arbind Sir
+# Don't forget to subscribe to the YouTube channel: 
+# https://www.youtube.com/c/TechMahato?sub_confirmation=1
+
 # Step 1: Update system packages
 sudo apt update
 sudo apt upgrade -y
 
-# Step 2: Install Java Development Kit (JDK)
-sudo apt install -y openjdk-11-jdk
+# Step 2: Install Java Runtime Environment (JRE)
+sudo apt install -y openjdk-17-jre
 
-# Step 3: Add Jenkins repository and key
-wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
-sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+# Step 3: Add Jenkins repository key and repository
+sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian/jenkins.io-2023.key
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian binary/" | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
 
 # Step 4: Install Jenkins
 sudo apt update
-sudo apt install -y jenkins
+sudo apt install -y fontconfig jenkins
 
 # Step 5: Start Jenkins service
 sudo systemctl start jenkins
@@ -38,18 +42,15 @@ echo "For example, if using AWS, configure security groups accordingly."
 # Step 11: Follow the setup wizard
 echo "Follow the setup wizard to customize your Jenkins installation."
 
-# Add Jenkins user to sudo group
+# Step 12: Add Jenkins user to sudo group
 echo "Adding Jenkins user to sudo group..."
 sudo usermod -aG sudo jenkins
 
-# Ensure sudo group privileges
+# Step 13: Ensure sudo group privileges
 echo "Ensure sudo group privileges..."
 echo "jenkins ALL=(ALL:ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/90-cloud-init-users
 
-# Print confirmation message
+# Step 14: Print confirmation message
 echo "Jenkins user added to sudo group with sudo privileges."
 
-
-#source https://www.coachdevops.com/2024/01/install-jenkins-on-ubuntu-2204-setup.html
-# source https://pkg.origin.jenkins.io/debian/
-
+# End of script
