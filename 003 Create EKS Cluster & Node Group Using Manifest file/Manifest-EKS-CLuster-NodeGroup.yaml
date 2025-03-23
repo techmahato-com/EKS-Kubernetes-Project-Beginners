@@ -1,70 +1,76 @@
----
+# EKS Cluster Configuration using eksctl
+
+##########
+# Developer: Tech Mahato
+# Subscribe to YouTube channel: Tech Mahato
+##########
+
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
-metadata:
-  name: dev-project-cluster  # Change this to your new project cluster name
-  region: us-east-1  # Change this if your cluster is in a different region
-  version: "1.29"
 
-# Change these subnet names and IDs to match your new project's VPC configuration
+metadata:
+  name: dev-project-cluster  # Cluster name - update as per your project
+  region: us-east-1  # AWS region where the cluster will be deployed
+  version: "1.29"  # EKS Kubernetes version
+
+# VPC and Subnet Configuration
 vpc:
+  cidr: "10.0.0.0/16"  # Define CIDR range for the VPC
+  nat:
+    gateway: Single  # Use Single NAT Gateway for cost optimization
   subnets:
     public:
       vpc-dev-public-us-east-1b:  
-        id: "subnet-028194843c89232f6"
+        id: "subnet-028194843c89232f6"  # Update with actual subnet ID
       Nvpc-dev-public-us-east-1a:
-        id: "subnet-04b22dd2582a9c2c5"
+        id: "subnet-04b22dd2582a9c2c5"  # Update with actual subnet ID
     private:
       vpc-dev-private-us-east-1b:
-        id: "subnet-049465ab3b1b842ec"
+        id: "subnet-049465ab3b1b842ec"  # Private subnet for workloads
       vpc-dev-private-us-east-1a:
         id: "subnet-0631d80ee2adea56b"
       vpc-dev-db-us-east-1b:
-        id: "subnet-0ad77ece1ce67ebea"
+        id: "subnet-0ad77ece1ce67ebea"  # Private subnet for DB layer
       vpc-dev-db-us-east-1a:
         id: "subnet-039a5330a79a9bfec"
 
-
+# Managed Node Groups Configuration
 managedNodeGroups:
-  - name: dev-project-App-NG-New-1  # Change this name to your new project node group name
-    ami: ami-01d4aea4600d4dd60  # Change this if your project uses a different AMI
-# command to get AMI ID as prt your cluster version. my case cluster version is 1.29
-# aws ssm get-parameter --name /aws/service/eks/optimized-ami/1.29/amazon-linux-2/recommended/image_id --region ap-south-1 --query "Parameter.Value" --output text
-
-    amiFamily: AmazonLinux2
+  - name: dev-project-App-NG-New-1  # Node group name
+    ami: ami-01d4aea4600d4dd60  # Amazon Machine Image (AMI) for worker nodes
+    amiFamily: AmazonLinux2  # AMI family for compatibility
     overrideBootstrapCommand: |
       #!/bin/bash
-      /etc/eks/bootstrap.sh dev-project-cluster --container-runtime containerd  # Update cluster name
-    minSize: 1
-    maxSize: 5
-    desiredCapacity: 1
-    instanceType: "t3.medium"
-    volumeSize: 30
-#    volumeEncrypted: true
-#    volumeKmsKeyID: 6e2224c4-2635-4fd7-aba6-a0bc770c590e # Update KMS ID if you have.
-    privateNetworking: true
+      /etc/eks/bootstrap.sh dev-project-cluster --container-runtime containerd  # Bootstrap script
+    minSize: 1  # Minimum number of worker nodes
+    maxSize: 5  # Maximum scaling limit
+    desiredCapacity: 1  # Desired number of nodes at launch
+    instanceType: "t3.medium"  # Instance type for nodes
+    volumeSize: 30  # Disk size for each node
+    volumeEncrypted: true  # Enable encryption for security
+    privateNetworking: true  # Ensures nodes communicate over private subnets
     subnets:
-      - vpc-dev-private-us-east-1a  # Update these to match the private subnets of your new project
+      - vpc-dev-private-us-east-1a  # Private subnet allocation
       - vpc-dev-private-us-east-1b
 
-    labels: {role: dev-App-NG-1}
+    labels: {role: dev-App-NG-1}  # Labels for Kubernetes workloads
     ssh:
-      publicKeyName: AM-es-east-1-kp  # Update to your new project's SSH key name
+      publicKeyName: AM-es-east-1-kp  # SSH key for accessing nodes
     tags:
       nodegroup-role: dev-App-NG-1
-      nodegroup-name: dev-project-App-NG-New-1  # Update to your new project's node group name
-      Project: Dev-Project  # Update to your new project name
+      nodegroup-name: dev-project-App-NG-New-1
+      Project: Dev-Project
       Env: Dev
       Layer: App
       Managedby: TechMahato-Team
+
     iam:
       attachPolicyARNs:
-        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
-#        - arn:aws:iam::576415024131:policy/new-project-uat-EKS-custom-policy  # Uncomment and update if you have custom policies
-        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
-        - arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess
-        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
-        - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+        - arn:aws:iam::123456789012:policy/AmazonEKSWorkerNodePolicy
+        - arn:aws:iam::123456789012:policy/AmazonEKS_CNI_Policy
+        - arn:aws:iam::123456789012:policy/ElasticLoadBalancingFullAccess
+        - arn:aws:iam::123456789012:policy/AmazonEC2ContainerRegistryReadOnly
+        - arn:aws:iam::123456789012:policy/CloudWatchAgentServerPolicy
       withAddonPolicies:
         autoScaler: true
         externalDNS: true
@@ -74,42 +80,39 @@ managedNodeGroups:
         albIngress: true
         cloudWatch: true
 
-
-  - name: dev-project-Monitoring-NG-2  # Change this name to your new project node group name
-    ami: ami-01d4aea4600d4dd60  # Change this if your project uses a different AMI
+  - name: dev-project-Monitoring-NG-2  # Second node group for monitoring workloads
+    ami: ami-01d4aea4600d4dd60
     amiFamily: AmazonLinux2
     overrideBootstrapCommand: |
       #!/bin/bash
-      /etc/eks/bootstrap.sh dev-project-cluster --container-runtime containerd  # Update cluster name
+      /etc/eks/bootstrap.sh dev-project-cluster --container-runtime containerd
     minSize: 1
     maxSize: 2
     desiredCapacity: 1
     instanceType: "t3.medium"
     volumeSize: 30
-#    volumeEncrypted: true
-#    volumeKmsKeyID: 6e2224c4-2635-4fd7-aba6-a0bc770c590e
+    volumeEncrypted: true  # Enable encryption for security
     privateNetworking: true
     subnets:
-      - vpc-dev-private-us-east-1a  # Update these to match the private subnets of your new project
+      - vpc-dev-private-us-east-1a
       - vpc-dev-private-us-east-1b
     labels: {role: dev-Monitoring-NG-1}
     ssh:
-      publicKeyName: AM-es-east-1-kp  # Update to your new project's SSH key name
+      publicKeyName: AM-es-east-1-kp
     tags:
       nodegroup-role: dev-Monitoring-NG-2
-      nodegroup-name: dev-project-Monitoring-NG-2  # Update to your new project's node group name
-      Project: New-Project  # Update to your new project name
+      nodegroup-name: dev-project-Monitoring-NG-2
+      Project: New-Project
       Env: Dev
       Layer: App
       Managedby: TechMahato-Team
     iam:
       attachPolicyARNs:
-        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
-#        - arn:aws:iam::576415024131:policy/new-project-uat-EKS-custom-policy  # Uncomment and update if you have custom policies
-        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
-        - arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess
-        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
-        - arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy
+        - arn:aws:iam::123456789012:policy/AmazonEKSWorkerNodePolicy
+        - arn:aws:iam::123456789012:policy/AmazonEKS_CNI_Policy
+        - arn:aws:iam::123456789012:policy/ElasticLoadBalancingFullAccess
+        - arn:aws:iam::123456789012:policy/AmazonEC2ContainerRegistryReadOnly
+        - arn:aws:iam::123456789012:policy/CloudWatchAgentServerPolicy
       withAddonPolicies:
         autoScaler: true
         externalDNS: true
@@ -118,5 +121,7 @@ managedNodeGroups:
         efs: true
         albIngress: true
         cloudWatch: true
-#secretsEncryption:
-#  keyARN: arn:aws:kms:ap-south-1:576415024131:key/6e2224c4-2635-4fd7-aba6-a0bc77  # Uncomment and update if you need secrets encryption with KMS
+
+# Enable Secrets Encryption with AWS KMS
+secretsEncryption:
+  keyARN: arn:aws:kms:us-east-1:123456789012:key/6e2224c4-2635-4fd7-aba6-a0bc770c590e  # Update with your KMS Key ARN
